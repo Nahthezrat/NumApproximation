@@ -212,7 +212,7 @@ namespace NumApproximation
             for (double x = 0.4; x <= 2.4; x += 0.01)
             {
                 //chart1.Series[0].Points.AddXY(x, system.XVector[0] + system.XVector[1]*x);
-                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Exp(system.XVector[1]*x));
+                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Pow(x, Math.Exp(system.XVector[1])));
             }
 
             /*
