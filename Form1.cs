@@ -194,8 +194,8 @@ namespace NumApproximation
                     Console.WriteLine(MatrixA[1, 0]);
                     Console.WriteLine(MatrixA[1, 1]);
                    //Заполнение матрицы B
-                    VectorB[0] += double.Parse(tokens[1]);
-                    VectorB[1] += double.Parse(tokens[1]) * double.Parse(tokens[0]);
+                    VectorB[0] += Math.Log(double.Parse(tokens[1]));
+                    VectorB[1] += Math.Log(double.Parse(tokens[1])) * double.Parse(tokens[0]);
                     Console.WriteLine(VectorB[0]);
                     Console.WriteLine(VectorB[1]);
 
@@ -211,7 +211,8 @@ namespace NumApproximation
             Console.WriteLine(system.XVector[1]);
             for (double x = 0.4; x <= 2.4; x += 0.01)
             {
-                chart1.Series[0].Points.AddXY(x, system.XVector[0] + system.XVector[1]*x);
+                //chart1.Series[0].Points.AddXY(x, system.XVector[0] + system.XVector[1]*x);
+                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Exp(system.XVector[1]*x));
             }
 
             /*
