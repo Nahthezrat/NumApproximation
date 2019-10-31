@@ -162,7 +162,7 @@ namespace NumApproximation
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
 
-            int rows = 6;
+            int rows = 10;
             double[][] data = new double[rows][];
             double[,] MatrixA = new double[2, 2];
             MatrixA[0, 0] = rows;
@@ -173,7 +173,7 @@ namespace NumApproximation
             VectorB[0] = 0;
             VectorB[1] = 0;
 
-            using (StreamReader sstream = new StreamReader("nodes.in"))
+            using (StreamReader sstream = new StreamReader("nodes2.in"))
             {
                 string line;
                 for(int i = 0; i < rows; ++i)
@@ -187,32 +187,40 @@ namespace NumApproximation
                     data[i][1] = double.Parse(tokens[1]);
 
                     //Заполнение матрицы A
-                    MatrixA[0, 1] += double.Parse(tokens[0]);
-                    MatrixA[1, 0] += double.Parse(tokens[0]);
-                    MatrixA[1, 1] += double.Parse(tokens[0]) * double.Parse(tokens[0]);
+                    MatrixA[0, 1] += Math.Log(double.Parse(tokens[0]));
+                    MatrixA[1, 0] += Math.Log(double.Parse(tokens[0]));
+                    MatrixA[1, 1] += Math.Log(double.Parse(tokens[0])) * Math.Log(double.Parse(tokens[0]));
                     Console.WriteLine(MatrixA[0, 1]);
                     Console.WriteLine(MatrixA[1, 0]);
                     Console.WriteLine(MatrixA[1, 1]);
-                   //Заполнение матрицы B
-                    VectorB[0] += Math.Log(double.Parse(tokens[1]));
-                    VectorB[1] += Math.Log(double.Parse(tokens[1])) * double.Parse(tokens[0]);
+                    //Заполнение матрицы B
+                    double xs = (2.0 + 2.9) / 2;
+                    double ys = 1.52724;
+                    double C = ((0.0000462 * (-0.52634)) - ys * ys) / (0.0000462 - 0.52634 - 2 * ys);
+                    Console.WriteLine("C:           "+C);
+                    VectorB[0] += Math.Log(double.Parse(tokens[1]) - C + 3);
+                    VectorB[1] += Math.Log(double.Parse(tokens[1]) - C + 3) * Math.Log(double.Parse(tokens[0]));
                     Console.WriteLine(VectorB[0]);
                     Console.WriteLine(VectorB[1]);
-
                     chart1.Series[1].Points.AddXY(double.Parse(tokens[0]), double.Parse(tokens[1]));
                 }
             }
 
-            
-            
-            
+
+            double xxs = (2.0 + 2.9) / 2;
+            double yys = 1.52724;
+            double CC = ((0.0000462 * (-0.52634)) - yys * yys) / (0.0000462 - 0.52634 - 2 * yys);
+
             LinearSystem system = new LinearSystem(MatrixA, VectorB);
             Console.WriteLine(system.XVector[0]);
             Console.WriteLine(system.XVector[1]);
-            for (double x = 0.4; x <= 2.4; x += 0.01)
+            double a = Math.Exp(system.XVector[0]);
+            double b = system.XVector[1];
+            for (double x = 2.0; x <= 2.9; x += 0.01)
             {
                 //chart1.Series[0].Points.AddXY(x, system.XVector[0] + system.XVector[1]*x);
-                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Pow(x, Math.Exp(system.XVector[1])));
+                //chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Pow(x, Math.Exp(system.XVector[1])));
+                chart1.Series[0].Points.AddXY(x, a * Math.Pow(x, b));
             }
 
             /*
