@@ -58,9 +58,9 @@ namespace NumApproximation
                     if (nodes[i, 1] > 0 && nodes[i, 1] < minPosY) { minPosY = nodes[i, 1]; }
 
                     /* Заполнение массива коэффциентов и свободных членов СЛАУ */
-                    MatrixA[0, 1] += Math.Log(nodes[i, 0]); // ln(x)
-                    MatrixA[1, 0] += Math.Log(nodes[i, 0]); // ln(x)
-                    MatrixA[1, 1] += Math.Pow(Math.Log(nodes[i, 0]), 2); // ln^2(x)
+                    MatrixA[0, 1] += nodes[i, 0]; // x
+                    MatrixA[1, 0] += nodes[i, 0]; // x
+                    MatrixA[1, 1] += Math.Pow(nodes[i, 0], 2); // x^2
                 }
             }
 
@@ -97,7 +97,7 @@ namespace NumApproximation
             for (int i = 0; i < nodesNum; ++i)
             {
                 VectorB[0] += Math.Log(nodes[i, 1] - C); // ln(y - С)
-                VectorB[1] += Math.Log(nodes[i, 1] - C) * Math.Log(nodes[i, 0]); // ln(y - С) * ln(x)
+                VectorB[1] += Math.Log(nodes[i, 1] - C) * nodes[i, 0]; // ln(y - С) * x
             }
 
             /* Отладочный вывод */
@@ -121,7 +121,7 @@ namespace NumApproximation
             /* Рисование графика аппроксимации */
             for (double x = nodes[0, 0]; x <= nodes[nodesNum - 1, 0]; x += 0.01) // От первого до последнего x в nodes
             {
-                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Pow(x, system.XVector[1]) + C - Math.Abs(minY)); // e^a * x^b + C (+abs(minY))
+                chart1.Series[0].Points.AddXY(x, Math.Exp(system.XVector[0]) * Math.Exp(system.XVector[1]*x) + C - Math.Abs(minY)); // e^a * exp(bx) + C (+abs(minY))
             }
 
         }
